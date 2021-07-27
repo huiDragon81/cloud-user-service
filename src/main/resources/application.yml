@@ -1,9 +1,9 @@
 server:
-  port: 9001
+  port: 0
 
 spring:
   application:
-    name: user-service
+    name: user-service, user-service-test, huidragon
 
 eureka:
   client:
