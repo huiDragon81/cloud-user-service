@@ -1,4 +1,4 @@
-package com.example.userservice;
+package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.jpa.UserEntity;
@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
