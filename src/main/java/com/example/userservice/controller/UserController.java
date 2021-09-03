@@ -28,7 +28,7 @@ public class UserController {
 
     @GetMapping("/health_check")
     public String status() {
-        return String.format("ok %s",env.getProperty("local.server.port"));
+        return String.format("ok %s",env.getProperty("token.secret"));
     }
 
     @PostMapping("/users")

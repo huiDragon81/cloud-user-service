@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: user-service, ecommerce
   h2:
     console:
       enabled: true
@@ -27,6 +27,12 @@ logging:
   level:
     com.example.cloudorderservice: DEBUG
 
-token:
-  expiration_time: 864000000
-  secret: user_token
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
+
+#token:
+#  expiration_time: 864000000
+#  secret: user_token
