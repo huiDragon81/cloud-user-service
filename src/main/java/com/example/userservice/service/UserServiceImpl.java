@@ -1,22 +1,28 @@
 package com.example.userservice.service;
 
 import com.example.userservice.dto.UserDto;
+import com.example.userservice.feignclient.OrderServiceClient;
 import com.example.userservice.jpa.UserEntity;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,6 +32,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    Environment env;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    OrderServiceClient orderServiceClient;
 
     @Override
     public UserDto createUser(UserDto user) {
@@ -54,9 +68,20 @@ public class UserServiceImpl implements UserService {
 
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-        List<ResponseOrder> orders =  new ArrayList<>();
-        userDto.setOrders(orders);
+        // resttemplate
+//        String orderUrl = String.format(env.getProperty("order_service.url"), userId);
+//        ResponseEntity<List<ResponseOrder>> orderListResponse =
+//                restTemplate.exchange(
+//                        orderUrl,
+//                        HttpMethod.GET,
+//                        null,
+//                        new ParameterizedTypeReference<>() {});
+//        List<ResponseOrder> orders =  orderListResponse.getBody();
+//        userDto.setOrders(orders);
 
+        // feign
+        List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
+        userDto.setOrders(orders);
         return userDto;
     }
 
